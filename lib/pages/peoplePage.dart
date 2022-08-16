@@ -1,6 +1,9 @@
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
+import 'dialogPage.dart';
 
 class PeoplePage extends StatefulWidget {
 
@@ -31,13 +34,13 @@ class _PeoplePageState extends State<PeoplePage> {
       stream: FirebaseFirestore.instance.collection('users').where('uid', isNotEqualTo: currentUser).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot){
         if(snapshot.hasError){
-          return Center(
+          return const Center(
             child: Text('Something went wrong.'),
           );
         }
 
         if(snapshot.connectionState == ConnectionState.waiting){
-          return Center(
+          return const Center(
             child: CircularProgressIndicator(),
           );
         }
@@ -49,27 +52,30 @@ class _PeoplePageState extends State<PeoplePage> {
 
           return Scaffold(
             appBar: AppBar(
-              title: Text('Chats'),
+              title: const Text('People'),
             ),
             body: ListView.builder(
                 itemCount: snapshot.data!.docs.length,
                 itemBuilder: (BuildContext context, int index){
-                  var cur = data![index].data().toString().split(',')[2].substring(7);
-                  var name = cur[0].toUpperCase() + cur.substring(1);
+                  // var cur = data![index].data().toString().split(',')[2].substring(7);
+                  // var name = cur[0].toUpperCase() + cur.substring(1);
+                  var cur = data![index].data().toString();
+                  var name = cur.split(',')[2].substring(7);
+                  name = name[0].toUpperCase() + name.substring(1);
                   index++;
                   return Card(
                     child: ListTile(
                       leading: CircleAvatar(
                         radius: 30,
                         backgroundColor: Colors.deepOrangeAccent,
-                        child: Text('${name[0]}', style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),),
+                        child: Text(name[0], style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w700),),
                       ),
-                      title: Text('${name}'),
-                      subtitle: const Text('Message'),
-                      // onTap: (){
-                      //   MessageUser.targetUser = dialogsName[index];
-                      //   Navigator.push(context,  MaterialPageRoute( builder: (context) => const MessagePage(),));
-                      // },
+                      title: Text(name),
+                      subtitle: const Text('Available'),
+                      onTap: (){
+                        Navigator.push(context,  MaterialPageRoute( builder: (context) => DialogPage(user: _currentUser, recipient:cur,),));
+
+                      },
                     ),
                   );
                 },

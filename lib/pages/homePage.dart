@@ -1,4 +1,5 @@
 
+import 'package:chat_app/pages/chatsPage.dart';
 import 'package:chat_app/pages/peoplePage.dart';
 import 'package:chat_app/pages/settingsPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -23,6 +24,7 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
+    //NewMessageState.isNewMessage = false;
     _currentUser = widget.user;
     super.initState();
   }
@@ -31,7 +33,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
 
     final tabPages = <Widget>[
-      const Center(child: Icon(Icons.message),),
+      Center(child: ChatsPage(user: _currentUser)),
       //const Center(child: Icon(Icons.phone),),
       Center(child: PeoplePage(user: _currentUser),),
       Center(child: SettingsPage(user: _currentUser)),
