@@ -74,7 +74,7 @@ class _PeoplePageState extends State<PeoplePage> {
                       subtitle: const Text('Available'),
                       onTap: (){
                         Navigator.push(context,  MaterialPageRoute( builder: (context) => DialogPage(user: _currentUser, recipient:cur,),));
-
+                        //Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => DialogPage(user: _currentUser, recipient:cur,)), (route) => false);
                       },
                     ),
                   );
