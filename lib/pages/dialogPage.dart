@@ -37,8 +37,11 @@ class _DialogPageState extends State<DialogPage> {
     recipientData = widget.recipient;
     _currentUser = widget.user;
     friendName = recipientData.split(',')[2].substring(7);
-    friendUid = recipientData.split(',')[0].substring(5);
+    friendUid = recipientData.split(',')[0].substring(6);
+    // print(widget.recipient);
+    // print(friendUid);
     currentUserId = FirebaseAuth.instance.currentUser?.uid;
+    // print(currentUserId);
     await chats
         .where('users', isEqualTo: {friendUid: null, currentUserId: null})
         .limit(1)
@@ -55,7 +58,7 @@ class _DialogPageState extends State<DialogPage> {
           await chats.add({
             'users': {currentUserId: null, friendUid: null},
             'names': {currentUserId:FirebaseAuth.instance.currentUser?.displayName,friendUid:friendName }
-          }).then((value) => {chatDocId = value});
+          }).then((value) {chatDocId = value.id;});
         }
       },
     )
