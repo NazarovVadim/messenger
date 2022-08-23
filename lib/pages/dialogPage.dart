@@ -8,10 +8,11 @@ import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_6.dart';
 class DialogPage extends StatefulWidget {
 
   final User user;
-  final String recipient;
+  final String recipientUid;
+  final String recipientName;
 
 
-  const DialogPage({required this.user, required this.recipient});
+  const DialogPage({required this.user, required this.recipientUid, required this.recipientName});
 
   @override
   State<DialogPage> createState() => _DialogPageState();
@@ -34,14 +35,14 @@ class _DialogPageState extends State<DialogPage> {
   }
 
   void checkUser() async{
-    recipientData = widget.recipient;
     _currentUser = widget.user;
-    friendName = recipientData.split(',')[2].substring(7);
-    friendUid = recipientData.split(',')[0].substring(6);
-    // print(widget.recipient);
-    // print(friendUid);
+    friendName = widget.recipientName;
+
+    friendUid = widget.recipientUid;
+
+    print(friendUid);
     currentUserId = FirebaseAuth.instance.currentUser?.uid;
-    // print(currentUserId);
+    print(currentUserId);
     await chats
         .where('users', isEqualTo: {friendUid: null, currentUserId: null})
         .limit(1)

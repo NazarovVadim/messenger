@@ -60,20 +60,21 @@ class _PeoplePageState extends State<PeoplePage> {
                   // var cur = data![index].data().toString().split(',')[2].substring(7);
                   // var name = cur[0].toUpperCase() + cur.substring(1);
                   var cur = data![index].data().toString();
-                  var name = cur.split(',')[2].substring(7);
-                  name = name[0].toUpperCase() + name.substring(1);
+                  var friendName = cur.split(',')[2].substring(7);
+                  friendName = friendName[0].toUpperCase() + friendName.substring(1);
+                  var friendUid = cur.split(',')[0].substring(6);
                   index++;
                   return Card(
                     child: ListTile(
                       leading: CircleAvatar(
                         radius: 30,
                         backgroundColor: Colors.deepOrangeAccent,
-                        child: Text(name[0], style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w700),),
+                        child: Text(friendName[0], style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w700),),
                       ),
-                      title: Text(name),
+                      title: Text(friendName),
                       subtitle: const Text('Available'),
                       onTap: (){
-                        Navigator.push(context,  MaterialPageRoute( builder: (context) => DialogPage(user: _currentUser, recipient:cur,),));
+                        Navigator.push(context,  MaterialPageRoute( builder: (context) => DialogPage(user: _currentUser, recipientName: friendName, recipientUid: friendUid,),));
                         //Navigator.pushAndRemoveUntil(context, MaterialPageRoute( builder: (context) => DialogPage(user: _currentUser, recipient:cur,)), (route) => false);
                       },
                     ),
