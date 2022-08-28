@@ -4,6 +4,7 @@ import 'package:chat_app/pages/peoplePage.dart';
 import 'package:chat_app/pages/settingsPage.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:chat_app/states/lib.dart';
 //import 'package:flutter/cupertino.dart';
 
 class HomePage extends StatefulWidget {
@@ -26,6 +27,8 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     //NewMessageState.isNewMessage = false;
     _currentUser = widget.user;
+    chatState.refreshChatsForCurrentUser();
+    usersState.initUsersListener();
     super.initState();
   }
 
@@ -33,9 +36,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
 
     final tabPages = <Widget>[
-      Center(child: ChatsPage(user: _currentUser)),
+      Center(child: ChatsPage(),),
       //const Center(child: Icon(Icons.phone),),
-      Center(child: PeoplePage(user: _currentUser),),
+      Center(child: PeoplePage(),),
       Center(child: SettingsPage(user: _currentUser)),
     ];
 

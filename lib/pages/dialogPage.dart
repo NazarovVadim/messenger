@@ -1,3 +1,4 @@
+import 'package:chat_app/models/fireAuth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -6,13 +7,12 @@ import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_6.dart';
 
 class DialogPage extends StatefulWidget {
-
-  final User user;
-  final String recipientUid;
   final String recipientName;
+  final String recipientUid;
 
 
-  const DialogPage({required this.user, required this.recipientUid, required this.recipientName});
+
+  const DialogPage({ required this.recipientName, required this.recipientUid});
 
   @override
   State<DialogPage> createState() => _DialogPageState();
@@ -21,9 +21,10 @@ class DialogPage extends StatefulWidget {
 class _DialogPageState extends State<DialogPage> {
   CollectionReference chats = FirebaseFirestore.instance.collection('chats');
   late String recipientData;
-  late User _currentUser;
-
-  var friendName, friendUid, currentUserId, chatDocId;
+  late String friendName = widget.recipientName;
+  final currentUserId = FirebaseAuth.instance.currentUser?.uid;
+  late String friendUid = widget.recipientUid;
+  var chatDocId;
   final _textController = TextEditingController();
 
 
@@ -35,14 +36,6 @@ class _DialogPageState extends State<DialogPage> {
   }
 
   void checkUser() async{
-    _currentUser = widget.user;
-    friendName = widget.recipientName;
-
-    friendUid = widget.recipientUid;
-
-    print(friendUid);
-    currentUserId = FirebaseAuth.instance.currentUser?.uid;
-    print(currentUserId);
     await chats
         .where('users', isEqualTo: {friendUid: null, currentUserId: null})
         .limit(1)
@@ -54,12 +47,12 @@ class _DialogPageState extends State<DialogPage> {
             chatDocId = querySnapshot.docs.single.id;
           });
 
-          // print(chatDocId);
+          //print(chatDocId);
         } else {
           await chats.add({
             'users': {currentUserId: null, friendUid: null},
-            'names': {currentUserId:FirebaseAuth.instance.currentUser?.displayName,friendUid:friendName }
-          }).then((value) {chatDocId = value.id;});
+            'names':{currentUserId:FirebaseAuth.instance.currentUser?.displayName,friendUid:friendName }
+          }).then((value) => {chatDocId = value as String});
         }
       },
     )
@@ -70,7 +63,7 @@ class _DialogPageState extends State<DialogPage> {
     if (msg == '') return;
     chats.doc(chatDocId).collection('messages').add({
       'createdOn': FieldValue.serverTimestamp(),
-      'uid': currentUserId,
+      'uid': friendUid,
       'friendName': friendName,
       'msg': msg
     }).then((value) {
@@ -79,11 +72,11 @@ class _DialogPageState extends State<DialogPage> {
   }
 
   bool isSender(String friend) {
-    return friend == currentUserId;
+    return friend != currentUserId;
   }
 
   Alignment getAlignment(friend) {
-    if (friend == currentUserId) {
+    if (friend != currentUserId) {
       return Alignment.topRight;
     }
     return Alignment.topLeft;
