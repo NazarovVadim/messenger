@@ -36,12 +36,12 @@ abstract class _ChatState with Store {
                 .snapshots()
                 .listen((QuerySnapshot snapshot) {
               if (snapshot.docs.isNotEmpty) {
-                print(messages);
                 messages[doc['name']] = {
                   'msg': snapshot.docs.first['msg'],
                   'time': snapshot.docs.first['createdOn'],
                   'friendName': doc['name'],
-                  'friendUid': snapshot.docs.first['uid']
+                  'friendUid': snapshot.docs.first['friendUid'],
+                  'uid': snapshot.docs.first['uid']
                 };
               }
             });

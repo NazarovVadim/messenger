@@ -41,13 +41,15 @@ class _ChatsPageState extends State<ChatsPage> {
             SliverList(
                 delegate: SliverChildListDelegate(
                   chatState.messages.values.toList().map((data) {
+                    print(data);
+                    String friendUid = data['friendUid'] == FirebaseAuth.instance.currentUser?.uid ? data['uid'] : data['friendUid'];
                     return Observer(
                       builder: (_) =>
                           CupertinoListTile(
                             leading: CircleAvatar(
                               radius: 30,
                               backgroundColor: Colors.deepOrangeAccent,
-                              child: Text(data['friendName'][0].toString().toUpperCase(), style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w700),),
+                              child: Text(usersState.users[friendUid]['name'][0].toString().toUpperCase(), style: const TextStyle(fontSize: 30, fontWeight: FontWeight.w700),),
                               // backgroundImage: NetworkImage(
                               //     usersState.users[data['friendUid']]['picture'] !=
                               //         null
@@ -56,17 +58,16 @@ class _ChatsPageState extends State<ChatsPage> {
 
                             ),
                             onTap: () {
-                              print(data);
                               callChatDetailScreen(
                                   context,
-                                  usersState.users[data['friendUid']]['name'] != null
-                                  ? usersState.users[data['friendUid']]['name']
+                                  usersState.users[friendUid]['name'] != null
+                                  ? usersState.users[friendUid]['name']
                                       : '',
-                                  data['friendUid']);
+                                  friendUid);
                             },
                             title: Text(
-                                usersState.users[data['friendUid']]['name'] != null
-                                    ? usersState.users[data['friendUid']]['name'][0].toUpperCase() + usersState.users[data['friendUid']]['name'].substring(1)
+                                usersState.users[friendUid]['name'] != null
+                                    ? usersState.users[friendUid]['name'][0].toUpperCase() + usersState.users[friendUid]['name'].substring(1)
                                     : ''
                             ),
                             subtitle: Text(

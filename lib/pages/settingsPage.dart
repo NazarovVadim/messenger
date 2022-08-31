@@ -1,4 +1,5 @@
 import 'package:chat_app/pages/loginPage.dart';
+import 'package:chat_app/states/lib.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -63,6 +64,10 @@ class _SettingsPageState extends State<SettingsPage> {
                         IconButton(
                             onPressed: () async{
                               await FirebaseAuth.instance.signOut();
+
+                              usersState.users.removeWhere((key, value) => true);
+                              chatState.messages.removeWhere((key, value) => true);
+
 
                               Navigator.of(context).pushReplacement(
                                 MaterialPageRoute(

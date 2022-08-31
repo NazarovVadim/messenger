@@ -63,7 +63,8 @@ class _DialogPageState extends State<DialogPage> {
     if (msg == '') return;
     chats.doc(chatDocId).collection('messages').add({
       'createdOn': FieldValue.serverTimestamp(),
-      'uid': friendUid,
+      'friendUid': friendUid,
+      'uid': currentUserId,
       'friendName': friendName,
       'msg': msg
     }).then((value) {
@@ -72,11 +73,11 @@ class _DialogPageState extends State<DialogPage> {
   }
 
   bool isSender(String friend) {
-    return friend != currentUserId;
+    return friend == currentUserId;
   }
 
   Alignment getAlignment(friend) {
-    if (friend != currentUserId) {
+    if (friend == currentUserId) {
       return Alignment.topRight;
     }
     return Alignment.topLeft;

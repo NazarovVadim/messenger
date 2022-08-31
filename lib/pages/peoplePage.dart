@@ -43,16 +43,16 @@ class PeoplePage extends StatelessWidget {
         Observer(
           builder: (_) => SliverList(
             delegate: SliverChildListDelegate(
-              usersState.people
-                  .map(
-                    (dynamic data) => CupertinoListTile(
+              usersState.people.map((dynamic data){
+                print(data);
+                return CupertinoListTile(
                   // leading: CircleAvatar(
                   //   radius: 30,
                   //   //backgroundImage: NetworkImage(data['picture'] != null ? data['picture'] : ''),
                   //   backgroundColor: Colors.deepOrangeAccent,
                   // ),
                   onTap: () {
-                    //print(data['uid']);
+                    print(data['uid']);
                     callChatDetailScreen(
                         context,
                         data['name'] != null ? data['name'] : '',
@@ -60,11 +60,9 @@ class PeoplePage extends StatelessWidget {
                     );
                   },
                   title: Text(data['name'] != null ? data['name'][0].toUpperCase() + data['name'].substring(1) : ''),
-                  subtitle:
-                  Text(data['status'] != null ? data['status'] : ''),
-                ),
-              )
-                  .toList(),
+                  subtitle: Text(data['status'] != null ? data['status'] : ''),
+                );
+              }).toList(),
             ),
           ),
         ),
